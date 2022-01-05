@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 const AddContact = () => {
@@ -11,6 +12,8 @@ const AddContact = () => {
     const [number, setNumber] = useState("");
     const contacts= useSelector((state)=>state);
 
+const dispatch=useDispatch();
+const history=useNavigate();
     const handlesubmit= (e)=>{
         e.preventDefault();
 
@@ -29,6 +32,17 @@ const AddContact = () => {
         if(checkNumber){
             return toast.error("Email ID already Exists!!")
         }
+
+        const data={
+            id:contacts[contacts.length-1].id+1,
+            name,
+            email,
+            number
+        }
+
+        dispatch({type:"ADD_CONTACT",payload:data});
+        toast.success("Contact Added Successfully!");
+        history("/");
     };
 
     return (
